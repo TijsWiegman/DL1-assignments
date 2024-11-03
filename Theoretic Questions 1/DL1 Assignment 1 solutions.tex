@@ -1,0 +1,213 @@
+\documentclass[a4paper]{article}
+
+\usepackage[utf8]{inputenc}
+\usepackage[dutch]{babel}
+\usepackage{geometry}
+\usepackage{graphicx}
+\usepackage{booktabs}
+\usepackage{array}
+\usepackage{paralist}
+\usepackage{verbatim}
+\usepackage{subfig}
+\usepackage{fancyhdr}
+\usepackage{sectsty}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{amsthm}
+\usepackage{wasysym}
+\usepackage{graphicx}
+\usepackage{mathtools}
+\usepackage[numbers]{natbib}
+\usepackage{caption}
+\usepackage{url}
+\usepackage[pdfborder={0 0 0}]{hyperref}
+\usepackage{gensymb}
+\usepackage{mathtools}
+\usepackage{mathrsfs}
+\usepackage{nccmath}
+\usepackage{enumitem}
+\usepackage[T1]{fontenc}
+\usepackage{bbm}
+\usepackage{parskip}
+\usepackage[many]{tcolorbox}
+\usepackage{fancyhdr}
+\pagestyle{fancy}
+\rhead{Tijs Wiegman 13865617}
+\newtcolorbox{mybox}[1][]{colback=black!5!white,colframe=black!75!black,fonttitle=\bfseries,title=#1}
+\newtcolorbox{ans}[1][]{colback=black!0!white,colframe=black!75!black,fonttitle=\bfseries,title=#1,breakable}
+
+\newcommand{\sm}[1]{\left( \begin{smallmatrix} #1 \end{smallmatrix} \right)}
+\newcommand{\bmat}[1]{\begin{bmatrix} #1 \end{bmatrix}}
+\newcommand{\pmat}[1]{\begin{pmatrix} #1 \end{pmatrix}}
+\renewcommand{\t}{\textrm}
+\newcommand{\R}{\mathbb{R}}
+\newcommand{\C}{\mathbb{C}}
+\newcommand{\N}{\mathbb{N}}
+\newcommand{\F}{\mathbb{F}}
+\newcommand{\E}{\mathbb{E}}
+\newcommand{\1}{\mathbbm{1}}
+\newcommand{\D}{\mathcal{D}}
+\newcommand{\NN}{\mathcal{N}}
+\newcommand{\ess}{\text{ess}}
+\renewcommand{\a}{\alpha}
+\renewcommand{\b}{\beta}
+\newcommand{\g}{\gamma}
+\newcommand{\eps}{\varepsilon}
+\renewcommand{\l}{\left}
+\renewcommand{\r}{\right}
+\newcommand{\<}{\langle}
+\renewcommand{\>}{\rangle}
+\newcommand{\ol}{\overline}
+\renewcommand{\d}[1]{\frac{d}{d #1}}
+\newcommand{\p}[1]{\frac{\partial}{\partial #1}}
+\newcommand{\dd}[2]{\frac{d #1}{d #2}}
+\newcommand{\pp}[2]{\frac{\partial #1}{\partial #2}}
+\newcommand{\bs}{\boldsymbol}
+
+\title{Deep Learning 1 \\ \Large Assignment 1}
+\author{Tijs Wiegman, 13865617}
+\date{\today}
+
+\begin{document}
+\maketitle
+%$T_{i_{j_{s}}} {}_W i^{e^{g_{m_{a_n}}}}$
+
+\textbf{Question 1:} Consider a linear module as described above. The input and output features are labeled as $\bold X$ and $\bold Y$, respectively. Find closed form expressions for
+\begin{align*}
+&\t{a)} \ \pp{L}{\bold W} \\
+&\t{b)} \ \pp{L}{\bold b} \\
+&\t{c)} \ \pp{L}{\bold X}
+\end{align*}
+\emph{in terms of} the gradients of the loss with respect to the output features $\pp{L}{\bold Y}$ provided by the next module during backpropagation. Assume the gradients have the same shape as the object with respect to which is being differentiated. E.g. $\pp{L}{\bold W}$ should have the same shape as $\bold W$, $\pp{L}{\bold b}$ should be a row-vector just like $\bold b$ etc.
+
+\begin{ans}[Solution]
+To start, note that for the elements of $\bold Y$ we can write
+$$\bold Y = \bold X \bold W^\top + \bold B \implies Y_{ij} = \sum_{k=1}^M X_{ik} W_{jk} + B_{ij}$$
+\hrule
+$$\pp{L}{W_{nm}} = \sum_{i,j} \pp{L}{Y_{ij}} \pp{Y_{ij}}{W_{nm}}$$
+\begin{align*}
+\pp{Y_{ij}}{W_{nm}} &= \p{W_{nm}} \l[ \sum_{k=1}^M X_{ik} W_{jk} + B_{ij} \r] \\
+&= \sum_{k=1}^M X_{ik} \pp{W_{jk}}{W_{nm}} \\
+&= \sum_{k=1}^M X_{ik} \delta_{jn} \delta_{km} \\
+&= X_{im} \delta_{jn}
+\end{align*}
+$$\implies \pp{L}{W_{nm}} = \sum_{i,j} \pp{L}{Y_{ij}} X_{im} \delta_{jn} = \sum_i \pp{L}{Y_{in}} X_{im} \implies \pp{L}{\bold W} = \l( \pp{L}{\bold Y} \r)^\top \bold X$$
+\hrule
+$$\pp{L}{b_\ell} = \sum_{i,j} \pp{L}{Y_{ij}} \pp{Y_{ij}}{b_\ell}$$
+\begin{align*}
+\pp{Y_{ij}}{b_\ell} = \p{b_\ell} \l[ \sum_{k=1}^M X_{ik} W_{jk} + B_{ij} \r] = \pp{b_j}{b_\ell} = \pp{B_{ij}}{b_\ell} = \delta_{j\ell}
+\end{align*}
+$$\implies \pp{L}{b_\ell} = \sum_{i,j} \pp{L}{Y_{ij}} \delta_{j\ell} = \sum_i \pp{L}{Y_{i\ell}} \implies \pp{L}{\bold b} = \bs1^\top \pp{L}{\bold Y}$$
+\hrule
+$$\pp{L}{X_{nm}} = \sum_{i,j} \pp{L}{Y_{ij}} \pp{Y_{ij}}{X_{nm}}$$
+\begin{align*}
+\pp{Y_{ij}}{X_{nm}} &= \p{X_{nm}} \l[ \sum_{k=1}^M X_{ik} W_{jk} + B_{ij} \r] \\
+&= \sum_{k=1}^M \pp{X_{ik}}{X_{nm}} W_{jk} \\
+&= \sum_{k=1}^M \delta_{in} \delta_{km} W_{jk} \\
+&= \delta_{in} W_{jm}
+\end{align*}
+$$\implies \pp{L}{X_{nm}} = \sum_{i,j} \pp{L}{Y_{ij}} \delta_{in} W_{jm} = \sum_j \pp{L}{Y_{nj}} W_{jm} \implies \pp{L}{\bold X} = \pp{L}{\bold Y} \bold W$$
+\end{ans}
+\newpage
+\begin{ans}
+$$\bold Y = \bold X \bold W^\top + \bold B \implies Y_{ij} = \sum_{k=1}^M X_{ik} W_{jk} + B_{ij}$$
+$$\pp{L}{W_{nm}} = \sum_i \pp{L}{Y_{ni}} \pp{Y_{ni}}{W_{nm}} = \sum_{i,j} \pp{L}{Y_{ij}} \pp{Y_{ij}}{W_{nm}} = $$
+\begin{align*}
+\pp{Y_{ni}}{W_{nm}} &= \p{W_{nm}} \l[ \sum_{k=1}^M X_{nk} W_{ik} + B_{ni} \r] \\
+&= \sum_{k=1}^M X_{nk} \pp{W_{ik}}{W_{nm}} \\
+&= \sum_{k=1}^M X_{nk} \delta_{in} \delta_{km} \\
+&= X_{nm} \delta_{in}
+\end{align*}
+$$\implies \pp{L}{W_{nm}} = \sum_i \pp{L}{Y_{ni}} X_{nm} \delta_{in}$$
+\end{ans}
+\begin{ans}
+$$\bold Y = \bold X \bold W^\top + \bold B \implies Y_{ij} = \sum_{k=1}^M X_{ik} W_{jk} + B_{ij}$$
+$$\pp{L}{W_{nm}} = \sum_i \pp{L}{Y_{ni}} \pp{Y_{ni}}{W_{nm}}$$
+\begin{align*}
+\pp{Y_{ni}}{W_{nm}} &= \p{W_{nm}} \l[ \sum_{k=1}^M X_{nk} W_{ik} + B_{ni} \r] \\
+&= \sum_{k=1}^M X_{nk} \pp{W_{ik}}{W_{nm}} \\
+&= \sum_{k=1}^M X_{nk} \delta_{in} \delta_{km} \\
+&= X_{nm} \delta_{in}
+\end{align*}
+$$\implies \pp{L}{W_{nm}} = \sum_i \pp{L}{Y_{ni}} X_{nm} \delta_{in}$$
+\end{ans}
+
+\newpage
+Consider an element-wise activation function $h$. The activation module has input and output features labelled by $\bold X$ and $\bold Y$, respectively. I.e. $\bold Y = h(\bold X) \implies Y_{ij} = h(X_{ij})$. Find a closed-form expression for
+$$\pp{L}{\bold X}$$
+\emph{in terms of} the gradient of the loss with respect to the output features $\pp{L}{\bold Y}$ provided by the next module. Assume the gradient has the same shape as $\bold X$.
+
+\begin{ans}[Solution]
+$$\pp{L}{X_{nm}} = \sum_{i,j} \pp{L}{Y_{ij}} \pp{Y_{ij}}{X_{nm}}$$
+$$\pp{Y_{ij}}{X_{nm}} = \pp{h(X_{ij})}{X_{nm}} = \delta_{in} \delta_{jm} h'(X_{ij})$$
+$$\implies \pp{L}{X_{nm}} = \sum_{i,j} \pp{L}{Y_{ij}} \delta_{in} \delta_{jm} h'(X_{ij}) = \pp{L}{Y_{nm}} h'(X_{nm})$$
+$$\implies \pp{L}{\bold X} = \pp{L}{\bold Y} \circ h'(\bold X)$$
+\end{ans}
+
+e) Let $\bold Z \in \R^{S \times C}$ be a feature matrix with $S$ samples at the end of a deep neural network. Consider a softmax layer $Y_{ij} = \frac{e^{Z_{ij}}}{\sum_k e^{Z_{ik}}}$ followed by a categorical cross-entropy loss. The final scalar loss $L$ is the arithmetic mean of $L_i = - \sum_k T_{ik} \log(Y_{ik})$ over all samples $i$ in the batch. Targets are collected in $\bold T \in \R^{S \times C}$ and the elements of each row sum to $1$. It can be shown that the gradients of these modules have the following closed form:
+$$\pp{L}{\bold Z} = \bold Y \circ \l( \pp{L}{\bold Y} - \l( \pp{L}{\bold Y} \circ \bold Y \r) \bs1 \bs1^\top \r)$$
+$$\pp{L}{\bold Y} = -\frac1S \frac{\bold T}{\bold Y}$$
+The Hadamard product is defined by $[\bold A \circ \bold B]_{ij} = A_{ij} B_{ij}$ and the division of the two matrices is also element-wise. The ones vector is denoted by $\bold 1$ and its size is such that the matrix multiplication in the expression above is well-defined.
+
+All gradients of the loss have the shape of the object with respect to which is being differentiated. One can combine these into a single module with the following gradient:
+$$\pp{L}{\bold Z} = \a \bold M$$
+Find expressions for the positive scalar $\a \in \R^+$ and the matrix $\bold M \in \R^{S \times C}$ in terms of $\bold Y$, $\bold T$, and $S$.
+
+\begin{ans}
+Since the division of two matrices is element-wise, we can write
+$$\l( \frac{\bold T}{\bold Y} \r)_{ij} = \frac{T_{ij}}{Y_{ij}} \implies \l( \frac{\bold T}{\bold Y} \circ \bold Y \r)_{ij} = \frac{T_{ij}}{Y_{ij}} Y_{ij} = T_{ij} \implies \frac{\bold T}{\bold Y} \circ \bold Y = \bold T$$
+We also know the rows of $\bold T$ sum to 1, i.e. $\sum_j T_{ij} = 1$. We get
+$$(\bold T \bs1)_i = \sum_j \bold T_{ij} \bs1_j = \sum_j T_{ij} = 1 \implies \bold T \bs1 = \bs1$$
+Lastly, note that for any matrix $\bold A$, we get
+$$(\bold A \circ \bs1 \bs1^\top)_{ij} = \bold A_{ij} (\bs1\bs1^\top)_{ij} = A_{ij} \cdot 1 = A_{ij} \implies \bold A \circ \bs1 \bs1^\top = \bold A$$
+Putting this together, we find
+\begin{align*}
+\pp{L}{\bold Z} &= \bold Y \circ \l( -\frac1S \frac{\bold T}{\bold Y} - \l(-\frac1S \frac{\bold T}{\bold Y} \circ \bold Y \r) \bs1 \bs1^\top \r) \\
+&= \bold Y \circ \l( -\frac1S \frac{\bold T}{\bold Y} + \frac1S \bold T \bs1 \bs1^\top \r) \\
+&= \frac1S \bigg( - \bold Y \circ \frac{\bold T}{\bold Y} + \bold Y \circ \l( \bs1 \bs1^\top \r) \bigg) \\
+&= \frac1S \bigg( - \bold T + \bold Y \bigg)
+\end{align*}
+$$\implies \a = \frac1S, \quad \quad \bold M = \bold Y - \bold T$$
+\end{ans}
+
+
+
+\textbf{Question 4:} Consider point $x_p$ where $\nabla_{\bold x} f(\bold x_p) = \bs0$, we call this point a critical or stationary point (the $p$ is to represent the critical point in $\bold x$). If a critical point is not a local maximum or minimum, it will be classified as a saddle point. To determine if a critical point in a higher dimension is a local minimum or maximum, we can use the Hessian matrix check. Applying the Hessian matrix to a critical point $H(\bold x_p)$ captures how the function curves around the critical point in a higher dimension, similar to how the derivative captures how a quadratic function curves around the critical point in 2 dimensions.
+
+For continuously differentiable function $f$ and real non-singular (invertible) Hessian matrix $H$ at point $\bold x_p$, if $H$ is positive definite we have a strictly local minimum, and if it is negative definite we have a strictly local maximum.
+
+a) Show that the eigenvalues for the Hessian matrix in a strictly local minimum are all positive.
+
+\begin{ans}
+Suppose $\bold x_p$ is a stictly local minimum, so that $\nabla_{\bold x} f(\bold x_p) = \bs0$. We will assume $f$ is \textbf{twice} continuously differentiable, so that its Hessian exists and the parital derivatives commute:
+$$\frac{\partial^2 f}{\partial x_i \partial x_j} = \frac{\partial^2 f}{\partial x_j \partial x_i} \implies H_{ij} = \frac{\partial^2 f}{\partial x_i \partial x_j} = \frac{\partial^2 f}{\partial x_j \partial x_i} = H_{ji}$$
+Thus, under these circumstances, $H$ is symmetric, meaning its eigenvalues are all real, at any point including $\bold x_p$. We consider the second-order Taylor expansion of $f(\bold x)$ around $\bold x_p$, with $\bold h = \bold x - \bold x_p$:
+\begin{align*}
+f(\bold x) &\approx f(\bold x_p) + \nabla_{\bold x} f(\bold x_p)^\top (\bold x - \bold x_p) + \frac12 (\bold x - \bold x_p)^\top H(\bold x_p) (\bold x - \bold x_p) \\
+\implies f(\bold h + \bold x_p)&\approx f(\bold x_p) + \frac12 \bold h^\top H(\bold x_p) \bold h \\
+\end{align*}
+Now to prove $H$ is positive definite, let $\bold x$ sufficiently close to $\bold x_p$. As $\bold x_p$ is a strictly local minimum we have $f(\bold x) > f(\bold x_p)$, which means we require $(\bold x - \bold x_p)^\top H(\bold x_p) (\bold x - \bold x_p) > 0$
+
+
+
+**Can I use the fact that at in a strictly local minimum, the Hessian matrix is positive definite?
+\end{ans}
+
+b) If some of the eigenvalues of the Hessian matrix at point $p$ are positive and some are negative, this point would be a saddle point; intuitively explain why the number of saddle points is exponentially larger than the number of local minima for higher dimensions? \\
+\emph{Hint: Think of the eigenvalue sign as flipping a coin with probability (1/2) for a head coming up (positive sign).}
+
+\begin{ans}
+Following the hint, note that for each eigenvalue, the sign has probability $1/2$ of being positive and probability $1/2$ of being negative. For a local minimum we need all eigenvalues to be positive, for a local maximum we need all eigenvalues to be negative, and for a saddle point the signs of the eigenvalues need to be mixed, i.e. atleast one is positive and atleast one is negative. If we consider $\R^n$, then $H \in \R^{n \times n}$ and thus has $n$ eigenvalues. The probability that all are postitve is $(\frac12)^n$ and the probability that all are negative is $(\frac12)^n$. This means the probability that the signs are mixed is $1 - 2 \cdot (\frac12)^n = 1 - (\frac12)^{n-1}$, which increases exponentially with the number of dimensions $n$.
+\end{ans}
+
+c) By using the update formula of gradient descent around saddle point p, show why saddle points can be harmful to training.
+
+
+\begin{ans}
+For weights $\bold w$ and loss function $L$, gradient descent in training is used to iteratively used to update the weights to decrease the loss. The update rule of gradient descent at iteration $\tau$ is
+$$\bold w^{(\tau + 1)} = \bold w^{(\tau)} - \eta \cdot \nabla_{\bold w} L(\bold w^{(\tau)})$$
+At a sadde point, the first derivative can be 0 as the area is nearly flat in all direction
+\end{ans}
+
+
+\end{document}
