@@ -30,9 +30,9 @@ class LinearModule(object):
         Initializes the parameters of the module.
 
         Args:
-          in_features: size of each input sample
-          out_features: size of each output sample
-          input_layer: boolean, True if this is the first layer after the input, else False.
+        in_features: size of each input sample
+        out_features: size of each output sample
+        input_layer: boolean, True if this is the first layer after the input, else False.
 
         TODO:
         Initialize weight parameters using Kaiming initialization.
@@ -42,14 +42,21 @@ class LinearModule(object):
         Also, initialize gradients with zeros.
         """
 
-        # Note: For the sake of this assignment, please store the parameters
-        # and gradients in this format, otherwise some unit tests might fail.
-        self.params = {'weight': None, 'bias': None} # Model parameters
-        self.grads = {'weight': None, 'bias': None} # Gradients
-
         #######################
         # PUT YOUR CODE HERE  #
         #######################
+
+        # Note: For the sake of this assignment, please store the parameters
+        # and gradients in this format, otherwise some unit tests might fail.
+        self.params = {
+            'weight': np.random.normal(0, np.sqrt(2 / in_features),(in_features, out_features)),    # Initialize weights with Kaiming initialization
+            'bias': np.zeros(out_features)}                                                         # Initialize biases with zeros
+        
+        self.grads = {
+            'weight': np.zeros_like(self.params['weight']),                                         # Initialize weight gradients with zeros
+            'bias': np.zeros_like(self.params['bias'])}                                             # Initialize bias gradients with zeros
+
+        self.cache = None                                                                           # Initialize cache for backward pass
 
         #######################
         # END OF YOUR CODE    #
@@ -74,6 +81,10 @@ class LinearModule(object):
         # PUT YOUR CODE HERE  #
         #######################
 
+        out = np.dot(x,self.params['weight']) + self.params['bias']             # Compute linear transformation
+
+        self.cache = x                                                          # Store input for backward pass
+ 
         #######################
         # END OF YOUR CODE    #
         #######################
@@ -98,6 +109,13 @@ class LinearModule(object):
         # PUT YOUR CODE HERE  #
         #######################
 
+        x = self.cache                                                  # Retrieve input from forward pass
+
+        self.grads['weight'] = np.dot(x.T, dout)                        # Compute gradient of previous module with respect to weights
+        self.grads['bias'] = np.sum(dout, axis=0)                       # Compute gradient of previous module with respect to biases
+
+        dx = np.dot(dout, self.params['weight'].T)                      # Compute gradient of previous module with respect to input
+
         #######################
         # END OF YOUR CODE    #
         #######################
@@ -114,7 +132,9 @@ class LinearModule(object):
         #######################
         # PUT YOUR CODE HERE  #
         #######################
-        pass
+
+        self.cache = None
+
         #######################
         # END OF YOUR CODE    #
         #######################
@@ -127,6 +147,7 @@ class ELUModule(object):
 
     def __init__(self, alpha):
         self.alpha = alpha
+        self.cache = None
 
     def forward(self, x):
         """
@@ -146,6 +167,10 @@ class ELUModule(object):
         #######################
         # PUT YOUR CODE HERE  #
         #######################
+
+        out =  self.alpha * (np.exp(x) - 1) if x <= 0 else x        # Compute ELU activation
+
+        self.cache = x                                              # Store input for backward pass
 
         #######################
         # END OF YOUR CODE    #
@@ -169,6 +194,12 @@ class ELUModule(object):
         # PUT YOUR CODE HERE  #
         #######################
 
+        x = self.cache                                              # Retrieve input from forward pass 
+        dx = self.alpha * np.exp(x) if x <= 0 else 1                # Compute gradient of previous module with respect to input
+
+        # Chainrule
+        dx = dx * dout                                              # multiply gradient with respect to input with gradient of previous module with respect to input
+
         #######################
         # END OF YOUR CODE    #
         #######################
@@ -185,7 +216,9 @@ class ELUModule(object):
         #######################
         # PUT YOUR CODE HERE  #
         #######################
-        pass
+        
+        self.cache = None
+
         #######################
         # END OF YOUR CODE    #
         #######################
@@ -215,6 +248,14 @@ class SoftMaxModule(object):
         # PUT YOUR CODE HERE  #
         #######################
 
+        max_x = np.max(x, axis=1, keepdims=True)                                  # Compute max values of inputs
+        exp_shifted = np.exp(x - max_x)                                           # Compute exponential of inputs shifted by max values
+        sum_exp = np.sum(exp_shifted, axis=1, keepdims=True)                      # Compute sum of exponential of input
+
+        out = exp_shifted / sum_exp                                               # Compute softmax activation
+
+        self.cache = out                                                          # Store output for backward pass
+
         #######################
         # END OF YOUR CODE    #
         #######################
@@ -236,6 +277,10 @@ class SoftMaxModule(object):
         #######################
         # PUT YOUR CODE HERE  #
         #######################
+
+        softmax_out = self.cache                                                # Retrieve output from forward pass
+        dx = np.zeros_like(dout)                                                # Initialize gradient of previous module with respect to input
+
 
         #######################
         # END OF YOUR CODE    #
