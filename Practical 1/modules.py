@@ -168,9 +168,9 @@ class ELUModule(object):
         # PUT YOUR CODE HERE  #
         #######################
 
-        out =  self.alpha * (np.exp(x) - 1) if x <= 0 else x        # Compute ELU activation
+        out = np.where(x > 0, x, self.alpha * (np.exp(x) - 1))        # Compute ELU activation
 
-        self.cache = x                                              # Store input for backward pass
+        self.cache = x                                                # Store input for backward pass
 
         #######################
         # END OF YOUR CODE    #
@@ -194,11 +194,11 @@ class ELUModule(object):
         # PUT YOUR CODE HERE  #
         #######################
 
-        x = self.cache                                              # Retrieve input from forward pass 
-        dx = self.alpha * np.exp(x) if x <= 0 else 1                # Compute gradient of previous module with respect to input
+        x = self.cache                                              # Retrieve input from forward pass
 
-        # Chainrule
-        dx = dx * dout                                              # multiply gradient with respect to input with gradient of previous module with respect to input
+        dh = np.where(x > 0, 1, self.alpha * np.exp(x))             # Compute gradient of activation function with respect to input
+
+        dx = dout * dh                                              # Use chainrule to compute gradient
 
         #######################
         # END OF YOUR CODE    #
@@ -278,9 +278,9 @@ class SoftMaxModule(object):
         # PUT YOUR CODE HERE  #
         #######################
 
-        softmax_out = self.cache                                                # Retrieve output from forward pass
-        dx = np.zeros_like(dout)                                                # Initialize gradient of previous module with respect to input
+        softmax_out = self.cache                                                                 # Retrieve output from forward pass
 
+        dx = softmax_out * (dout - np.sum(dout * softmax_out, axis=1, keepdims=True))            # Compute gradient
 
         #######################
         # END OF YOUR CODE    #
@@ -299,7 +299,9 @@ class SoftMaxModule(object):
         #######################
         # PUT YOUR CODE HERE  #
         #######################
-        pass
+        
+        self.cache = None
+
         #######################
         # END OF YOUR CODE    #
         #######################
@@ -326,6 +328,8 @@ class CrossEntropyModule(object):
         #######################
         # PUT YOUR CODE HERE  #
         #######################
+        
+        out = -np.sum(y * np.log(x)) / len(y)                                     # Compute cross entropy loss  *problems with log(0)?
 
         #######################
         # END OF YOUR CODE    #
@@ -349,6 +353,8 @@ class CrossEntropyModule(object):
         #######################
         # PUT YOUR CODE HERE  #
         #######################
+
+        dx = (x - y) / len(y)                                                     # Compute gradient
 
         #######################
         # END OF YOUR CODE    #
