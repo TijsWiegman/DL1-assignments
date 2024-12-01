@@ -23,7 +23,7 @@ def get_config():
     # Additional arguments. Feel free to add more arguments
     parser.add_argument('--log_dir', type=str, default='./logs', help='Sets logging directory for tensorboard logger.')
     parser.add_argument('--seed', type=int, default=0, help='Seed for pseudo-random number generator')
-    #parser.add_argument('--num_workers', type=int, default=len(os.sched_getaffinity(0))-1, help='Num cpu workers used for training')
+    parser.add_argument('--num_workers', type=int, default=len(os.sched_getaffinity(0))-1, help='Num cpu workers used for training')
     parser.add_argument('--progress_bar', action='store_true', help=(
                             'Use a progress bar indicator for interactive experimentation. '
                             'Not to be used in conjuction with SLURM jobs'

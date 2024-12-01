@@ -1,0 +1,130 @@
+============================================================================================== 
+Warning! Mixing Conda and module environments may lead to corruption of the
+user environment. 
+We do not recommend users mixing those two environments unless absolutely
+necessary. Note that 
+SURF does not provide any support for Conda environment.
+For more information, please refer to our software policy page:
+https://servicedesk.surf.nl/wiki/display/WIKI/Software+policy+Snellius#SoftwarepolicySnellius-UseofAnacondaandMinicondaenvironmentsonSnellius 
+
+Remember that many packages have already been installed on the system and can
+be loaded using 
+the 'module load <package__name>' command. If you are uncertain if a package is
+already available 
+on the system, please use 'module avail' or 'module spider' to search for it.
+============================================================================================== 
+[rank: 0] Seed set to 0
+Using 16bit Automatic Mixed Precision (AMP)
+GPU available: True (cuda), used: True
+TPU available: False, using: 0 TPU cores
+HPU available: False, using: 0 HPUs
+LOCAL_RANK: 0 - CUDA_VISIBLE_DEVICES: [0]
+Namespace(txt_file='./assets/book_EN_grimms_fairy_tales.txt', model_type='gpt-mini', block_size=128, use_pretrained=False, abs_emb=False, train_batch_size=128, generate_batch_size=5, generate_every_n_steps=1000, learning_rate=0.0005, weight_decay=0.1, betas=(0.9, 0.95), num_epochs=5, clip_grad_norm=1.0, log_dir='./logs', seed=0, num_workers=8, progress_bar=False, use_flash_attn=True, precision='16-mixed', compile=True, pretrained_tokenizer=False, device='cuda')
+data has 540241 characters, 87 unique.
+True False
+number of parameters: 10.73M
+running on device cpu
+x type: <class 'torch.Tensor'>, x shape: torch.Size([1, 17])
+Finding best initial lr:   0%|          | 0/100 [00:00<?, ?it/s]Traceback (most recent call last):
+  File "/gpfs/home6/scur2814/DL1/assignment2/part2/train.py", line 210, in <module>
+    train(args=args)
+  File "/gpfs/home6/scur2814/DL1/assignment2/part2/train.py", line 203, in train
+    trainer.fit(lightning_model)
+  File "/home/scur2814/.conda/envs/dl2024/lib/python3.12/site-packages/pytorch_lightning/trainer/trainer.py", line 538, in fit
+    call._call_and_handle_interrupt(
+  File "/home/scur2814/.conda/envs/dl2024/lib/python3.12/site-packages/pytorch_lightning/trainer/call.py", line 47, in _call_and_handle_interrupt
+    return trainer_fn(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/scur2814/.conda/envs/dl2024/lib/python3.12/site-packages/pytorch_lightning/trainer/trainer.py", line 574, in _fit_impl
+    self._run(model, ckpt_path=ckpt_path)
+  File "/home/scur2814/.conda/envs/dl2024/lib/python3.12/site-packages/pytorch_lightning/trainer/trainer.py", line 961, in _run
+    call._call_callback_hooks(self, "on_fit_start")
+  File "/home/scur2814/.conda/envs/dl2024/lib/python3.12/site-packages/pytorch_lightning/trainer/call.py", line 218, in _call_callback_hooks
+    fn(trainer, trainer.lightning_module, *args, **kwargs)
+  File "/home/scur2814/.conda/envs/dl2024/lib/python3.12/site-packages/pytorch_lightning/callbacks/lr_finder.py", line 130, in on_fit_start
+    self.lr_find(trainer, pl_module)
+  File "/home/scur2814/.conda/envs/dl2024/lib/python3.12/site-packages/pytorch_lightning/callbacks/lr_finder.py", line 113, in lr_find
+    self.optimal_lr = _lr_find(
+                      ^^^^^^^^^
+  File "/home/scur2814/.conda/envs/dl2024/lib/python3.12/site-packages/pytorch_lightning/tuner/lr_finder.py", line 278, in _lr_find
+    _try_loop_run(trainer, params)
+  File "/home/scur2814/.conda/envs/dl2024/lib/python3.12/site-packages/pytorch_lightning/tuner/lr_finder.py", line 523, in _try_loop_run
+    loop.run()
+  File "/home/scur2814/.conda/envs/dl2024/lib/python3.12/site-packages/pytorch_lightning/loops/fit_loop.py", line 205, in run
+    self.advance()
+  File "/home/scur2814/.conda/envs/dl2024/lib/python3.12/site-packages/pytorch_lightning/loops/fit_loop.py", line 363, in advance
+    self.epoch_loop.run(self._data_fetcher)
+  File "/home/scur2814/.conda/envs/dl2024/lib/python3.12/site-packages/pytorch_lightning/loops/training_epoch_loop.py", line 140, in run
+    self.advance(data_fetcher)
+  File "/home/scur2814/.conda/envs/dl2024/lib/python3.12/site-packages/pytorch_lightning/loops/training_epoch_loop.py", line 250, in advance
+    batch_output = self.automatic_optimization.run(trainer.optimizers[0], batch_idx, kwargs)
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/scur2814/.conda/envs/dl2024/lib/python3.12/site-packages/pytorch_lightning/loops/optimization/automatic.py", line 190, in run
+    self._optimizer_step(batch_idx, closure)
+  File "/home/scur2814/.conda/envs/dl2024/lib/python3.12/site-packages/pytorch_lightning/loops/optimization/automatic.py", line 268, in _optimizer_step
+    call._call_lightning_module_hook(
+  File "/home/scur2814/.conda/envs/dl2024/lib/python3.12/site-packages/pytorch_lightning/trainer/call.py", line 167, in _call_lightning_module_hook
+    output = fn(*args, **kwargs)
+             ^^^^^^^^^^^^^^^^^^^
+  File "/home/scur2814/.conda/envs/dl2024/lib/python3.12/site-packages/pytorch_lightning/core/module.py", line 1306, in optimizer_step
+    optimizer.step(closure=optimizer_closure)
+  File "/home/scur2814/.conda/envs/dl2024/lib/python3.12/site-packages/pytorch_lightning/core/optimizer.py", line 153, in step
+    step_output = self._strategy.optimizer_step(self._optimizer, closure, **kwargs)
+                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/scur2814/.conda/envs/dl2024/lib/python3.12/site-packages/pytorch_lightning/strategies/strategy.py", line 238, in optimizer_step
+    return self.precision_plugin.optimizer_step(optimizer, model=model, closure=closure, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/scur2814/.conda/envs/dl2024/lib/python3.12/site-packages/pytorch_lightning/plugins/precision/amp.py", line 78, in optimizer_step
+    closure_result = closure()
+                     ^^^^^^^^^
+  File "/home/scur2814/.conda/envs/dl2024/lib/python3.12/site-packages/pytorch_lightning/loops/optimization/automatic.py", line 144, in __call__
+    self._result = self.closure(*args, **kwargs)
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/scur2814/.conda/envs/dl2024/lib/python3.12/site-packages/torch/utils/_contextlib.py", line 116, in decorate_context
+    return func(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^
+  File "/home/scur2814/.conda/envs/dl2024/lib/python3.12/site-packages/pytorch_lightning/loops/optimization/automatic.py", line 129, in closure
+    step_output = self._step_fn()
+                  ^^^^^^^^^^^^^^^
+  File "/home/scur2814/.conda/envs/dl2024/lib/python3.12/site-packages/pytorch_lightning/loops/optimization/automatic.py", line 317, in _training_step
+    training_step_output = call._call_strategy_hook(trainer, "training_step", *kwargs.values())
+                           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/scur2814/.conda/envs/dl2024/lib/python3.12/site-packages/pytorch_lightning/trainer/call.py", line 319, in _call_strategy_hook
+    output = fn(*args, **kwargs)
+             ^^^^^^^^^^^^^^^^^^^
+  File "/home/scur2814/.conda/envs/dl2024/lib/python3.12/site-packages/pytorch_lightning/strategies/strategy.py", line 390, in training_step
+    return self.lightning_module.training_step(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/gpfs/home6/scur2814/DL1/assignment2/part2/train.py", line 55, in training_step
+    generated_sents = self.generate()
+                      ^^^^^^^^^^^^^^^
+  File "/home/scur2814/.conda/envs/dl2024/lib/python3.12/site-packages/torch/utils/_contextlib.py", line 116, in decorate_context
+    return func(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^
+  File "/gpfs/home6/scur2814/DL1/assignment2/part2/train.py", line 121, in generate
+    y = self.model.generate(x, n_steps, temperature=1.0, do_sample=do_sample, top_k=top_k, top_p=top_p)[0]
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/scur2814/.conda/envs/dl2024/lib/python3.12/site-packages/torch/utils/_contextlib.py", line 116, in decorate_context
+    return func(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^
+  File "/gpfs/home6/scur2814/DL1/assignment2/part2/gpt.py", line 527, in generate
+    idx_cond = idx if idx.size(1) <= self.block_size else idx[:, -self.block_size:]
+                      ^^^^^^^^
+AttributeError: 'ellipsis' object has no attribute 'size'
+Finding best initial lr:   0%|          | 0/100 [00:13<?, ?it/s]
+srun: error: gcn8: task 0: Exited with exit code 1
+srun: Terminating StepId=8864466.0
+
+JOB STATISTICS
+==============
+Job ID: 8864466
+Cluster: snellius
+User/Group: scur2814/scur2814
+State: FAILED (exit code 1)
+Nodes: 1
+Cores per node: 18
+CPU Utilized: 00:00:26
+CPU Efficiency: 4.38% of 00:09:54 core-walltime
+Job Wall-clock time: 00:00:33
+Memory Utilized: 2.23 MB
+Memory Efficiency: 0.00% of 120.00 GB

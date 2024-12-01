@@ -127,19 +127,17 @@ class CausalSelfAttention(nn.Module):
         # return xq_rot, xk_rot
 
         device = xq.device
-        dim = xq.size(-1)
+        head_dim  = xq.size(-1)
 
-        # Generate position indices and compute θₘ,ᵢ = m * ωᵢ
+        # Generate position indices and compute freqs
         seq_pos = torch.arange(T, device=device).unsqueeze(-1)  # Shape: (T, 1) with values [0, 1, 2, ..., T-1]
-        freqs = seq_pos * self.inv_freq  # Shape: (T, head_dim // 2) with values [0, ωᵢ, 2ωᵢ, ..., (T-1)ωᵢ]
+        device = seq_pos.device  # Get the device of seq_pos
+        self.inv_freq = self.inv_freq.to(device)  # Ensure self.inv_freq is on the same device
+        freqs = seq_pos * self.inv_freq  # Shape: (T, head_dim // 2)
         
         # Create sine and cosine embeddings
         pos_sin = torch.sin(freqs)  # Shape: (T, head_dim // 2)
         pos_cos = torch.cos(freqs)  # Shape: (T, head_dim // 2)
-
-        # Expand positional embeddings to match query/key dimensions
-        pos_sin = torch.cat([pos_sin, pos_sin], dim=-1).unsqueeze(0).unsqueeze(0)  # Shape: (1, 1, T, head_dim)
-        pos_cos = torch.cat([pos_cos, pos_cos], dim=-1).unsqueeze(0).unsqueeze(0)  # Shape: (1, 1, T, head_dim)
 
         # Split query tensor into even and odd components
         xq_even = xq[..., ::2]  # Shape: [batch, num_heads, seq_len, head_dim // 2]
@@ -250,7 +248,7 @@ class TransformerDecoderBlock(nn.Module):
             nn.Linear(self.n_embd, 4 * self.n_embd),  # Expansion
             BERTGELU(),  # GELU activation
             nn.Linear(4 * self.n_embd, self.n_embd),  # Compression
-            nn.Dropout(self.resid_pdrop)  # Residual dropout
+            nn.Dropout(config.resid_pdrop)  # Residual dropout
         )
 
     def forward(self, x):
@@ -529,24 +527,32 @@ class GPT(nn.Module):
             idx_cond = idx if idx.size(1) <= self.block_size else idx[:, -self.block_size:]
 
             # forward the model to get the logits for the index in the sequence
+            logits = self(idx_cond)[:, -1, :]  # Shape: (batch_size, vocab_size)
+            logits = logits / temperature  # Scale logits by temperature
+
             # pluck the logits at the final step and scale by desired temperature
 
             if not do_sample:
                 # take the most likely token
-                idx_next = ...
-            
+                idx_next = torch.argmax(logits, dim=-1, keepdim=True)  # Shape: (batch_size, 1)   
             else:
                 # apply softmax to convert logits to (normalized) probabilities
+                probs = torch.softmax(logits, dim=-1)  # Shape: (batch_size, vocab_size)
 
                 # optionally only consider top-k logits for sampling. 
                 if top_k is not None:
-                    pass
+                    # Top-k sampling: Retain only top_k logits, zero-out the rest
+                    top_k_probs, top_k_indices = torch.topk(probs, top_k, dim=-1)
+                    probs = torch.zeros_like(probs).scatter_(-1, top_k_indices, top_k_probs)
 
                 # optionally apply top-p sampling
                 if top_p is not None:
                     pass
+
+                # Sample from the filtered probability distribution
+                idx_next = torch.multinomial(probs, num_samples=1)  # Shape: (batch_size, 1)
             
             # append sampled index to the running sequence and continue
-            idx = ...
+            idx = torch.cat((idx, idx_next), dim=1)  # Shape: (batch_size, seq_len + 1)
 
         return idx

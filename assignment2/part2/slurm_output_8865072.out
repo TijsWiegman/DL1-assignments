@@ -1,0 +1,59 @@
+============================================================================================== 
+Warning! Mixing Conda and module environments may lead to corruption of the
+user environment. 
+We do not recommend users mixing those two environments unless absolutely
+necessary. Note that 
+SURF does not provide any support for Conda environment.
+For more information, please refer to our software policy page:
+https://servicedesk.surf.nl/wiki/display/WIKI/Software+policy+Snellius#SoftwarepolicySnellius-UseofAnacondaandMinicondaenvironmentsonSnellius 
+
+Remember that many packages have already been installed on the system and can
+be loaded using 
+the 'module load <package__name>' command. If you are uncertain if a package is
+already available 
+on the system, please use 'module avail' or 'module spider' to search for it.
+============================================================================================== 
+[rank: 0] Seed set to 0
+Using 16bit Automatic Mixed Precision (AMP)
+GPU available: True (cuda), used: True
+TPU available: False, using: 0 TPU cores
+HPU available: False, using: 0 HPUs
+LOCAL_RANK: 0 - CUDA_VISIBLE_DEVICES: [0]
+Namespace(txt_file='./assets/book_EN_grimms_fairy_tales.txt', model_type='gpt-mini', block_size=128, use_pretrained=False, abs_emb=False, train_batch_size=128, generate_batch_size=5, generate_every_n_steps=1000, learning_rate=0.0005, weight_decay=0.1, betas=(0.9, 0.95), num_epochs=5, clip_grad_norm=1.0, log_dir='./logs', seed=0, num_workers=8, progress_bar=False, use_flash_attn=True, precision='16-mixed', compile=True, pretrained_tokenizer=False, device='cuda')
+data has 540241 characters, 87 unique.
+True False
+number of parameters: 10.73M
+running on device cpu
+Finding best initial lr:   0%|          | 0/100 [00:00<?, ?it/s]Finding best initial lr:   1%|          | 1/100 [00:22<37:17, 22.60s/it]Finding best initial lr:   2%|▏         | 2/100 [00:33<25:41, 15.72s/it]Finding best initial lr:   5%|▌         | 5/100 [00:33<07:06,  4.49s/it]Finding best initial lr:   8%|▊         | 8/100 [00:33<03:25,  2.24s/it]Finding best initial lr:  11%|█         | 11/100 [00:33<01:57,  1.31s/it]Finding best initial lr:  14%|█▍        | 14/100 [00:33<01:11,  1.20it/s]Finding best initial lr:  17%|█▋        | 17/100 [00:34<00:46,  1.80it/s]Finding best initial lr:  20%|██        | 20/100 [00:34<00:30,  2.61it/s]Finding best initial lr:  23%|██▎       | 23/100 [00:34<00:20,  3.68it/s]Finding best initial lr:  26%|██▌       | 26/100 [00:34<00:14,  5.07it/s]Finding best initial lr:  29%|██▉       | 29/100 [00:34<00:10,  6.80it/s]Finding best initial lr:  32%|███▏      | 32/100 [00:34<00:07,  8.87it/s]Finding best initial lr:  35%|███▌      | 35/100 [00:34<00:05, 11.21it/s]Finding best initial lr:  38%|███▊      | 38/100 [00:34<00:04, 13.71it/s]Finding best initial lr:  41%|████      | 41/100 [00:34<00:03, 16.23it/s]Finding best initial lr:  44%|████▍     | 44/100 [00:35<00:03, 18.60it/s]Finding best initial lr:  47%|████▋     | 47/100 [00:35<00:02, 20.72it/s]Finding best initial lr:  50%|█████     | 50/100 [00:35<00:02, 22.50it/s]Finding best initial lr:  53%|█████▎    | 53/100 [00:35<00:01, 23.94it/s]Finding best initial lr:  56%|█████▌    | 56/100 [00:35<00:01, 25.06it/s]Finding best initial lr:  59%|█████▉    | 59/100 [00:35<00:01, 25.90it/s]Finding best initial lr:  62%|██████▏   | 62/100 [00:35<00:01, 26.62it/s]Finding best initial lr:  65%|██████▌   | 65/100 [00:35<00:01, 27.05it/s]Finding best initial lr:  68%|██████▊   | 68/100 [00:35<00:01, 27.37it/s]Finding best initial lr:  71%|███████   | 71/100 [00:35<00:01, 27.69it/s]Finding best initial lr:  74%|███████▍  | 74/100 [00:36<00:00, 27.82it/s]Finding best initial lr:  77%|███████▋  | 77/100 [00:36<00:00, 28.01it/s]Finding best initial lr:  80%|████████  | 80/100 [00:36<00:00, 28.14it/s]Finding best initial lr:  83%|████████▎ | 83/100 [00:36<00:00, 28.20it/s]Finding best initial lr:  83%|████████▎ | 83/100 [00:36<00:07,  2.28it/s]
+LR finder stopped early after 83 steps due to diverging loss.
+Learning rate set to 0.0003019951720402019
+Restoring states from the checkpoint path at /gpfs/home6/scur2814/DL1/assignment2/part2/.lr_find_6fcdae65-406e-4a21-a05f-b1bd13f839ce.ckpt
+Restored all states from the checkpoint at /gpfs/home6/scur2814/DL1/assignment2/part2/.lr_find_6fcdae65-406e-4a21-a05f-b1bd13f839ce.ckpt
+
+  | Name  | Type            | Params | Mode 
+--------------------------------------------------
+0 | model | OptimizedModule | 10.8 M | train
+--------------------------------------------------
+10.8 M    Trainable params
+0         Non-trainable params
+10.8 M    Total params
+43.034    Total estimated model params size (MB)
+87        Modules in train mode
+0         Modules in eval mode
+Restored all states from the checkpoint at /gpfs/home6/scur2814/DL1/assignment2/part2/.lr_find_6fcdae65-406e-4a21-a05f-b1bd13f839ce.ckpt
+SLURM auto-requeueing enabled. Setting signal handlers.
+`Trainer.fit` stopped: `max_epochs=5` reached.
+
+JOB STATISTICS
+==============
+Job ID: 8865072
+Cluster: snellius
+User/Group: scur2814/scur2814
+State: COMPLETED (exit code 0)
+Nodes: 1
+Cores per node: 18
+CPU Utilized: 00:14:58
+CPU Efficiency: 6.16% of 04:03:00 core-walltime
+Job Wall-clock time: 00:13:30
+Memory Utilized: 2.25 GB
+Memory Efficiency: 1.88% of 120.00 GB
