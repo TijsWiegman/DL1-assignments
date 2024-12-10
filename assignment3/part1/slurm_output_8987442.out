@@ -1,0 +1,129 @@
+============================================================================================== 
+Warning! Mixing Conda and module environments may lead to corruption of the
+user environment. 
+We do not recommend users mixing those two environments unless absolutely
+necessary. Note that 
+SURF does not provide any support for Conda environment.
+For more information, please refer to our software policy page:
+https://servicedesk.surf.nl/wiki/display/WIKI/Software+policy+Snellius#SoftwarepolicySnellius-UseofAnacondaandMinicondaenvironmentsonSnellius 
+
+Remember that many packages have already been installed on the system and can
+be loaded using 
+the 'module load <package__name>' command. If you are uncertain if a package is
+already available 
+on the system, please use 'module avail' or 'module spider' to search for it.
+============================================================================================== 
+Downloading http://yann.lecun.com/exdb/mnist/train-images-idx3-ubyte.gz
+Failed to download (trying next):
+HTTP Error 403: Forbidden
+
+Downloading https://ossci-datasets.s3.amazonaws.com/mnist/train-images-idx3-ubyte.gz
+Downloading https://ossci-datasets.s3.amazonaws.com/mnist/train-images-idx3-ubyte.gz to /scratch-local/scur2814.8987442/MNIST/raw/train-images-idx3-ubyte.gz
+  0%|          | 0.00/9.91M [00:00<?, ?B/s]  0%|          | 32.8k/9.91M [00:00<00:53, 184kB/s]  2%|▏         | 197k/9.91M [00:00<00:15, 608kB/s]   8%|▊         | 754k/9.91M [00:00<00:05, 1.74MB/s] 31%|███       | 3.05M/9.91M [00:00<00:01, 6.42MB/s] 62%|██████▏   | 6.16M/9.91M [00:00<00:00, 12.0MB/s]100%|██████████| 9.91M/9.91M [00:00<00:00, 11.2MB/s]
+Extracting /scratch-local/scur2814.8987442/MNIST/raw/train-images-idx3-ubyte.gz to /scratch-local/scur2814.8987442/MNIST/raw
+
+Downloading http://yann.lecun.com/exdb/mnist/train-labels-idx1-ubyte.gz
+Failed to download (trying next):
+HTTP Error 403: Forbidden
+
+Downloading https://ossci-datasets.s3.amazonaws.com/mnist/train-labels-idx1-ubyte.gz
+Downloading https://ossci-datasets.s3.amazonaws.com/mnist/train-labels-idx1-ubyte.gz to /scratch-local/scur2814.8987442/MNIST/raw/train-labels-idx1-ubyte.gz
+  0%|          | 0.00/28.9k [00:00<?, ?B/s]100%|██████████| 28.9k/28.9k [00:00<00:00, 324kB/s]
+Extracting /scratch-local/scur2814.8987442/MNIST/raw/train-labels-idx1-ubyte.gz to /scratch-local/scur2814.8987442/MNIST/raw
+
+Downloading http://yann.lecun.com/exdb/mnist/t10k-images-idx3-ubyte.gz
+Failed to download (trying next):
+HTTP Error 403: Forbidden
+
+Downloading https://ossci-datasets.s3.amazonaws.com/mnist/t10k-images-idx3-ubyte.gz
+Downloading https://ossci-datasets.s3.amazonaws.com/mnist/t10k-images-idx3-ubyte.gz to /scratch-local/scur2814.8987442/MNIST/raw/t10k-images-idx3-ubyte.gz
+  0%|          | 0.00/1.65M [00:00<?, ?B/s]  4%|▍         | 65.5k/1.65M [00:00<00:06, 245kB/s] 14%|█▍        | 229k/1.65M [00:00<00:02, 572kB/s]  54%|█████▎    | 885k/1.65M [00:00<00:00, 1.84MB/s]100%|██████████| 1.65M/1.65M [00:00<00:00, 2.62MB/s]
+Extracting /scratch-local/scur2814.8987442/MNIST/raw/t10k-images-idx3-ubyte.gz to /scratch-local/scur2814.8987442/MNIST/raw
+
+Downloading http://yann.lecun.com/exdb/mnist/t10k-labels-idx1-ubyte.gz
+Failed to download (trying next):
+HTTP Error 403: Forbidden
+
+Downloading https://ossci-datasets.s3.amazonaws.com/mnist/t10k-labels-idx1-ubyte.gz
+Downloading https://ossci-datasets.s3.amazonaws.com/mnist/t10k-labels-idx1-ubyte.gz to /scratch-local/scur2814.8987442/MNIST/raw/t10k-labels-idx1-ubyte.gz
+  0%|          | 0.00/4.54k [00:00<?, ?B/s]100%|██████████| 4.54k/4.54k [00:00<00:00, 34.6MB/s]
+Extracting /scratch-local/scur2814.8987442/MNIST/raw/t10k-labels-idx1-ubyte.gz to /scratch-local/scur2814.8987442/MNIST/raw
+
+GPU available: True (cuda), used: True
+TPU available: False, using: 0 TPU cores
+HPU available: False, using: 0 HPUs
+[rank: 0] Seed set to 42
+You are using a CUDA device ('NVIDIA A100-SXM4-40GB') that has Tensor Cores. To properly utilize them, you should set `torch.set_float32_matmul_precision('medium' | 'high')` which will trade-off precision for performance. For more details, read https://pytorch.org/docs/stable/generated/torch.set_float32_matmul_precision.html#torch.set_float32_matmul_precision
+LOCAL_RANK: 0 - CUDA_VISIBLE_DEVICES: [0]
+
+  | Name    | Type       | Params | Mode 
+-----------------------------------------------
+0 | encoder | CNNEncoder | 142 K  | train
+1 | decoder | CNNDecoder | 127 K  | train
+-----------------------------------------------
+270 K     Trainable params
+0         Non-trainable params
+270 K     Total params
+1.082     Total estimated model params size (MB)
+29        Modules in train mode
+0         Modules in eval mode
+SLURM auto-requeueing enabled. Setting signal handlers.
+Traceback (most recent call last):
+  File "/gpfs/home6/scur2814/DL1/assignment3/part1/train_pl.py", line 282, in <module>
+    train_vae(args)
+  File "/gpfs/home6/scur2814/DL1/assignment3/part1/train_pl.py", line 231, in train_vae
+    trainer.fit(model, train_loader, val_loader)
+  File "/home/scur2814/.conda/envs/dl2024/lib/python3.12/site-packages/pytorch_lightning/trainer/trainer.py", line 538, in fit
+    call._call_and_handle_interrupt(
+  File "/home/scur2814/.conda/envs/dl2024/lib/python3.12/site-packages/pytorch_lightning/trainer/call.py", line 47, in _call_and_handle_interrupt
+    return trainer_fn(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/scur2814/.conda/envs/dl2024/lib/python3.12/site-packages/pytorch_lightning/trainer/trainer.py", line 574, in _fit_impl
+    self._run(model, ckpt_path=ckpt_path)
+  File "/home/scur2814/.conda/envs/dl2024/lib/python3.12/site-packages/pytorch_lightning/trainer/trainer.py", line 981, in _run
+    results = self._run_stage()
+              ^^^^^^^^^^^^^^^^^
+  File "/home/scur2814/.conda/envs/dl2024/lib/python3.12/site-packages/pytorch_lightning/trainer/trainer.py", line 1023, in _run_stage
+    self._run_sanity_check()
+  File "/home/scur2814/.conda/envs/dl2024/lib/python3.12/site-packages/pytorch_lightning/trainer/trainer.py", line 1052, in _run_sanity_check
+    val_loop.run()
+  File "/home/scur2814/.conda/envs/dl2024/lib/python3.12/site-packages/pytorch_lightning/loops/utilities.py", line 178, in _decorator
+    return loop_run(self, *args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/scur2814/.conda/envs/dl2024/lib/python3.12/site-packages/pytorch_lightning/loops/evaluation_loop.py", line 135, in run
+    self._evaluation_step(batch, batch_idx, dataloader_idx, dataloader_iter)
+  File "/home/scur2814/.conda/envs/dl2024/lib/python3.12/site-packages/pytorch_lightning/loops/evaluation_loop.py", line 396, in _evaluation_step
+    output = call._call_strategy_hook(trainer, hook_name, *step_args)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/scur2814/.conda/envs/dl2024/lib/python3.12/site-packages/pytorch_lightning/trainer/call.py", line 319, in _call_strategy_hook
+    output = fn(*args, **kwargs)
+             ^^^^^^^^^^^^^^^^^^^
+  File "/home/scur2814/.conda/envs/dl2024/lib/python3.12/site-packages/pytorch_lightning/strategies/strategy.py", line 411, in validation_step
+    return self.lightning_module.validation_step(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/gpfs/home6/scur2814/DL1/assignment3/part1/train_pl.py", line 143, in validation_step
+    L_rec, L_reg, bpd = self.forward(batch[0])
+                        ^^^^^^^^^^^^^^^^^^^^^^
+  File "/gpfs/home6/scur2814/DL1/assignment3/part1/train_pl.py", line 75, in forward
+    z = sample_reparameterize(mean, log_std)
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/gpfs/home6/scur2814/DL1/assignment3/part1/utils.py", line 33, in sample_reparameterize
+    assert not (std < 0).any().item(), "The reparameterization trick got a negative std as input. " + \
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: The reparameterization trick got a negative std as input. Are you sure your input is std and not log_std?
+Sanity Checking: |          | 0/? [00:00<?, ?it/s]Sanity Checking:   0%|          | 0/2 [00:00<?, ?it/s]Sanity Checking DataLoader 0:   0%|          | 0/2 [00:00<?, ?it/s]                                                                   srun: error: gcn49: task 0: Exited with exit code 1
+srun: Terminating StepId=8987442.0
+
+JOB STATISTICS
+==============
+Job ID: 8987442
+Cluster: snellius
+User/Group: scur2814/scur2814
+State: FAILED (exit code 1)
+Nodes: 1
+Cores per node: 18
+CPU Utilized: 00:00:13
+CPU Efficiency: 2.41% of 00:09:00 core-walltime
+Job Wall-clock time: 00:00:30
+Memory Utilized: 2.44 MB
+Memory Efficiency: 0.00% of 120.00 GB

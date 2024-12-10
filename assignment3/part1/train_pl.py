@@ -72,7 +72,8 @@ class VAE(pl.LightningModule):
         #######################
 
         mean, log_std = self.encoder(imgs)
-        z = sample_reparameterize(mean, log_std)
+        std = torch.exp(log_std)
+        z = sample_reparameterize(mean, std)
         decoded_logits = self.decoder(z)
 
     #     L_rec = F.cross_entropy(
