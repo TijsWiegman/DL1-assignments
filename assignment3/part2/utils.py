@@ -101,10 +101,16 @@ def train(model, trainloader, validloader, num_epochs=25, defense_strategy = STA
                                                 return_preds = True)
                     # backward + optimize only if in training phase
                     elif defense_strategy == PGD and phase == 'train':
+
                         # Get adverserial examples using PGD attack
+                        adv_examples = pgd_attack(model, inputs, labels, criterion, defense_args)
+
                         # Add them to the original batch
+                        inputs = torch.cat([inputs, adv_examples])
+
                         # Make sure the model has the correct labels
-                        raise NotImplementedError()
+                        labels = torch.cat([labels, labels])
+
                         optimizer.zero_grad()
                         outputs = model(inputs)
                         loss = criterion(outputs, labels)
